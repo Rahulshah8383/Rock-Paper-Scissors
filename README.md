@@ -6,15 +6,6 @@ Welcome to the Rock-Paper-Scissors game! This project is a simple implementation
 
 You can play the game online by visiting the live demo [here](https://rahulshah8383.github.io/Rock-Paper-Scissors/).
 
-## How to Play
-
-1. Open the game in your web browser.
-2. Click on one of the buttons for Rock, Paper, or Scissors to make your choice.
-3. The computer will randomly choose its move.
-4. The result of the round will be displayed on the screen. You can win, lose, or draw.
-5. The score will be updated accordingly for each round.
-6. Continue playing until you decide to end the game.
-7. To end the game, click on the "End Game" 🔴 button.
 
 ## Technologies Used
 
