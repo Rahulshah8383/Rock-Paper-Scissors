@@ -1,87 +1,63 @@
-function getComputerChoice() {
-  const rpsChoices = ['Rock', 'Paper', 'Scissors'];
-  const computerChoice = rpsChoices[Math.floor(Math.random() * 3)];
-  return computerChoice;
-}
+let userScore = 0;
+let compScore = 0;
 
-function getResult(playerChoice, computerChoice) {
-  // Determine the result of the round and return the score accordingly
+const choices = document.querySelectorAll(".choice");
+const msg = document.querySelector("#msg");
 
-  let score;
+const userScorePara = document.querySelector("#user-score");
+const compScorePara = document.querySelector("#comp-score");
 
-  if (playerChoice === computerChoice) {
-      // Draw scenario
-      score = 0;
-  } else if (playerChoice === 'Rock' && computerChoice === 'Scissors') {
-      // Player wins with Rock over Scissors
-      score = 1;
-  } else if (playerChoice === "Paper" && computerChoice === "Rock") {
-      // Player wins with Paper over Rock
-      score = 1;
-  } else if (playerChoice === "Scissors" && computerChoice === "Paper") {
-      // Player wins with Scissors over Paper
-      score = 1;
+const genCompChoice = () => {
+  const options = ["rock", "paper", "scissors"];
+  const randIdx = Math.floor(Math.random() * 3);
+  return options[randIdx];
+};
+
+const drawGame = () => {
+  msg.innerText = "Game was Draw. Play again.";
+  msg.style.backgroundColor = "#081b31";
+};
+
+const showWinner = (userWin, userChoice, compChoice) => {
+  if (userWin) {
+    userScore++;
+    userScorePara.innerText = userScore;
+    msg.innerText = `You win! 👱 ${userChoice} beats 🤖 ${compChoice}`;
+    msg.style.backgroundColor = "green";
   } else {
-      // Player loses
-      score = -1;
+    compScore++;
+    compScorePara.innerText = compScore;
+    msg.innerText = `You lost! 🤖 ${compChoice} beats 👱 ${userChoice}`;
+    msg.style.backgroundColor = "red";
   }
+};
 
-  return score;
-}
+const playGame = (userChoice) => {
+  //Generate computer choice
+  const compChoice = genCompChoice();
 
-function showResult(score, playerChoice, computerChoice) {
-  // Update the DOM to display the game result and player/computer choices
-
-  const result = document.getElementById('result');
-  switch (score) {
-      case -1:
-          result.innerText = `You Lose!`;
-          break;
-      case 0:
-          result.innerText = `It's a Draw!`;
-          break;
-      case 1:
-          result.innerText = `You Win!`;
-          break;
+  if (userChoice === compChoice) {
+    //Draw Game
+    drawGame();
+  } else {
+    let userWin = true;
+    if (userChoice === "rock") {
+      //scissors, paper
+      userWin = compChoice === "paper" ? false : true;
+    } else if (userChoice === "paper") {
+      //rock, scissors
+      userWin = compChoice === "scissors" ? false : true;
+    } else {
+      //rock, paper
+      userWin = compChoice === "rock" ? false : true;
+    }
+    showWinner(userWin, userChoice, compChoice);
   }
+};
 
-  const playerScore = document.getElementById('player-score');
-  const hands = document.getElementById('hands');
-  playerScore.innerText = `${Number(playerScore.innerText) + score}`;
-  hands.innerText = `👱 ${playerChoice} vs 🤖 ${computerChoice}`;
-}
-
-function onClickRPS(playerChoice) {
-  // Calculate the result and display it when a player clicks on a RPS button
-  const computerChoice = getComputerChoice();
-  const score = getResult(playerChoice.value, computerChoice);
-  showResult(score, playerChoice.value, computerChoice);
-}
-
-function playGame() {
-  // Make the RPS buttons actively listen for a click and do something once a click is detected
-
-  const rpsButtons = document.querySelectorAll('.rpsButton');
-
-  // Add an event listener to each RPS button and call onClickRPS function when clicked
-  rpsButtons.forEach(rpsButton => {
-      rpsButton.onclick = () => onClickRPS(rpsButton);
+choices.forEach((choice) => {
+  choice.addEventListener("click", () => {
+    const userChoice = choice.getAttribute("id");
+    playGame(userChoice);
   });
-
-  // Add a click listener to the end game button that runs the endGame() function on click
-  const endGameButton = document.getElementById('endGameButton');
-  endGameButton.onclick = () => endGame();
-}
-
-function endGame() {
-  // Clear all the displayed text on the DOM
-
-  const playerScore = document.getElementById('player-score');
-  const hands = document.getElementById('hands');
-  const result = document.getElementById('result');
-  playerScore.innerText = '';
-  hands.innerText = '';
-  result.innerText = '';
-}
-
-playGame();
+});
